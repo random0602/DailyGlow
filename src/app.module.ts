@@ -17,15 +17,27 @@ import { UsersModule } from './users/users.module';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'public'),
     }),
-    
-    TypeOrmModule.forRoot({
-      type: 'sqlite',
-      database: 'planner.db',
-      entities: [Task, User, Mood],
-      synchronize: true,
-    }),
 
-    TypeOrmModule.forFeature([User]), 
+    TypeOrmModule.forRoot(
+  process.env.DATABASE_URL 
+    ? {
+        // PRODUCTION (Railway)
+        type: 'postgres',
+        url: process.env.DATABASE_URL,
+        autoLoadEntities: true,
+        synchronize: true,
+        ssl: { rejectUnauthorized: false },
+      } 
+    : {
+        // LOCAL DEVELOPMENT
+        type: 'sqlite',
+        database: 'turbo.db',
+        entities: [User, Task, Mood],
+        synchronize: true,
+      }
+),
+
+    TypeOrmModule.forFeature([User]),
 
     JwtModule.register({
       global: true,
@@ -43,4 +55,4 @@ import { UsersModule } from './users/users.module';
   controllers: [AuthController],
   providers: [AuthService],
 })
-export class AppModule {}
+export class AppModule { }
