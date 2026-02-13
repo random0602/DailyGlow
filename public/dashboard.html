@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Glow - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <div class="logo">
+            <h2>✨ Glow</h2>
+        </div>
+        <ul>
+            <li class="active"><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+
+            <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+            <li><a href="moods.html"><i class="fas fa-smile"></i> Moods</a></li>
+            <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+        <div class="logout-section">
+            <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+
+        <header class="top-bar">
+            <div class="welcome-text">
+                <h1 id="greeting">Hello, Beautiful! ✨</h1>
+                <p id="currentDate">Loading date...</p>
+            </div>
+            <div class="user-profile">
+                <div class="avatar">🌸</div>
+            </div>
+        </header>
+
+        <div class="stats-container">
+            <div class="stat-card">
+                <h3>Total</h3>
+                <p id="total-count">0</p>
+            </div>
+            <div class="stat-card pending">
+                <h3>To Do</h3>
+                <p id="pending-count">0</p>
+            </div>
+            <div class="stat-card completed">
+                <h3>Done</h3>
+                <p id="done-count">0</p>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="task-section">
+                <div class="input-group">
+                    <input type="text" id="taskInput" placeholder="Add a new goal..." />
+                    <button onclick="addTask()"><i class="fas fa-plus"></i></button>
+                </div>
+                <ul id="taskList">
+                </ul>
+            </div>
+
+            <div class="widget-section">
+                <div class="calendar-card">
+                    <h3 id="calendar-month">Month</h3>
+                    <div class="calendar-grid" id="calendar-grid">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="notification-container"></div>
+
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-icon">🗑️</div>
+            <h3>Delete this task?</h3>
+            <p>You can't undo this action.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-confirm" onclick="confirmDeleteAction()">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Check login
+        if (!localStorage.getItem('token')) window.location.href = '/index.html';
+
+        function logout() {
+            localStorage.removeItem('token');
+            window.location.href = '/index.html';
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Glow - Login</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #F8C8DC; --accent: #E75480; --bg: #FFF0F5; }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--bg);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(231, 84, 128, 0.2);
+            width: 300px;
+        }
+        h1 { color: var(--accent); margin-bottom: 10px; }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid var(--primary);
+            border-radius: 8px;
+            box-sizing: border-box; 
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+        button:hover { background: #d63f6c; }
+        .switch-btn {
+            background: none;
+            color: #888;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        .switch-btn:hover { background: none; color: var(--accent); text-decoration: underline; }
+
+        #notification-container {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        /* The Notification Box */
+        .notification {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 50px; /* Fully rounded pill shape */
+            box-shadow: 0 5px 15px rgba(231, 84, 128, 0.3);
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            opacity: 0;
+            transform: translateY(-20px);
+            animation: slideIn 0.3s forwards, fadeOut 0.5s 2.5s forwards;
+            min-width: 250px;
+            justify-content: center;
+        }
+
+        /* Success Theme (Pink) */
+        .notification.success {
+            border: 2px solid #F8C8DC;
+            color: #E75480;
+        }
+
+        /* Error Theme (Soft Red) */
+        .notification.error {
+            border: 2px solid #ffcccc;
+            color: #d63f6c;
+        }
+
+        /* Animations */
+        @keyframes slideIn {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeOut {
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+    </style>
+</head>
+<body>
+    <div id="notification-container"></div>
+
+    <div class="card">
+        <h1>Daily Glow</h1>
+        <p id="subtitle">Login to your space</p>
+        
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        
+        <button onclick="handleAuth()" id="actionBtn">Login</button>
+        <button class="switch-btn" onclick="toggleMode()" id="toggleBtn">New here? Create Account</button>
+    </div>
+
+    <script>
+        let isLogin = true;
+
+    // 1. New Notification Function
+    function showNotification(message, type = 'success') {
+        const container = document.getElementById('notification-container');
+        
+        // Create the element
+        const notif = document.createElement('div');
+        notif.className = `notification ${type}`;
+        
+        // Add icon based on type
+        const icon = type === 'success' ? '✨' : '⚠️';
+        notif.innerHTML = `<span>${icon}</span> ${message}`;
+
+        // Add to screen
+        container.appendChild(notif);
+
+        // Remove it after 3 seconds (matches CSS animation)
+        setTimeout(() => {
+            notif.remove();
+        }, 3000);
+    }
+
+    function toggleMode() {
+        isLogin = !isLogin;
+        document.getElementById('subtitle').innerText = isLogin ? "Login to your space" : "Create your account";
+        document.getElementById('actionBtn').innerText = isLogin ? "Login" : "Sign Up";
+        document.getElementById('toggleBtn').innerText = isLogin ? "New here? Create Account" : "Already have an account? Login";
+    }
+
+    async function handleAuth() {
+        const username = document.getElementById('username').value;
+        const pass = document.getElementById('password').value;
+
+        // Basic validation
+        if (!username || !pass) {
+            showNotification("Please fill in all fields", "error");
+            return;
+        }
+
+        const endpoint = isLogin ? '/auth/login' : '/auth/signup';
+
+        try {
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password: pass })
+            });
+
+            if (res.ok) {
+                if (isLogin) {
+                    const data = await res.json();
+                    localStorage.setItem('token', data.accessToken);
+                    
+                    // Show success and redirect
+                    showNotification("Welcome back! ✨", "success");
+                    setTimeout(() => window.location.href = '/dashboard.html', 1000);
+                } else {
+                    showNotification("Account created! Please login.", "success");
+                    toggleMode();
+                }
+            } else {
+                // Handle server errors (like "User already exists")
+                const errorMsg = await res.text();
+                // Parse the error if it's JSON, otherwise show text
+                try {
+                    const errorJson = JSON.parse(errorMsg);
+                    showNotification(errorJson.message, "error");
+                } catch {
+                    showNotification("Something went wrong", "error");
+                }
+            }
+        } catch (error) {
+            showNotification("Cannot connect to server", "error");
+        }
+    }
+    </script>
+</body>
+</html>

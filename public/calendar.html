@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Glow - Calendar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="notification-container"></div>
+
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-icon">🗑️</div>
+            <h3>Delete this task?</h3>
+            <p>You can't undo this action.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-confirm" onclick="confirmDeleteAction()">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <nav class="sidebar">
+        <div class="logo"><h2>✨ Glow</h2></div>
+        <ul>
+            <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li class="active"><a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+            <li><a href="moods.html"><i class="fas fa-smile"></i> Moods</a></li>
+            <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+        <div class="logout-section">
+            <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="welcome-text">
+                <h1>Your Schedule 📅</h1>
+                <p>Plan your success, one day at a time.</p>
+            </div>
+            <div class="user-profile"><div class="avatar">🌸</div></div>
+        </header>
+
+        <div class="calendar-header">
+            <button onclick="changeMonth(-1)"><i class="fas fa-chevron-left"></i></button>
+            <h2 id="month-year-display">Month Year</h2>
+            <button onclick="changeMonth(1)"><i class="fas fa-chevron-right"></i></button>
+        </div>
+
+        <div class="full-calendar-container">
+            <div class="weekdays">
+                <div>Sun</div><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            </div>
+            <div class="days-grid" id="full-calendar-grid">
+                </div>
+        </div>
+
+        <div id="day-details" class="day-details-panel" style="display:none;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 id="selected-date-title">Select a date...</h3>
+        <button onclick="closeDetails()" style="background:none; color:#999; font-size:1.2rem;">&times;</button>
+    </div>
+
+    <div class="input-group" style="margin-bottom: 15px;">
+        <input type="text" id="scheduledTaskInput" placeholder="Plan something for this day..." />
+        <button onclick="addScheduledTask()">Add</button>
+    </div>
+
+    <ul id="day-task-list">
+        </ul>
+</div>
+
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Inline script to initialize the calendar page specifically
+        document.addEventListener('DOMContentLoaded', () => {
+            initFullCalendar();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Glow - Moods</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="sidebar">
+        <div class="logo">
+            <h2>✨ Glow</h2>
+        </div>
+        <ul>
+            <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+            <li class="active"><a href="moods.html"><i class="fas fa-smile"></i> Moods</a></li>
+            <li><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+        <div class="logout-section">
+            <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="welcome-text">
+                <h1>Mood Tracker 🌸</h1>
+                <p>How are you feeling today?</p>
+            </div>
+            <div class="user-profile">
+                <div class="avatar">🌸</div>
+            </div>
+        </header>
+
+        <div class="card" style="text-align:center; padding: 40px;">
+            <div class="mood-selector">
+                <span onclick="selectMood('😢')" class="mood-btn">😢</span>
+                <span onclick="selectMood('😐')" class="mood-btn">😐</span>
+                <span onclick="selectMood('🙂')" class="mood-btn">🙂</span>
+                <span onclick="selectMood('😁')" class="mood-btn">😁</span>
+                <span onclick="selectMood('🤩')" class="mood-btn">🤩</span>
+            </div>
+
+            <textarea id="moodNote" placeholder="Why do you feel this way? (Optional)" rows="3"></textarea>
+
+            <button onclick="saveMood()" class="btn-log-mood">
+                <span>✨</span> Save My Mood
+            </button>
+        </div>
+
+        <h3 style="margin-top:40px; color:var(--accent);">Recent Moods</h3>
+        <div id="mood-history" class="mood-grid">
+        </div>
+
+    </main>
+
+    <div id="notification-container"></div>
+
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-icon">🗑️</div>
+            <h3>Remove this mood?</h3>
+            <p>This memory will be deleted forever.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-confirm" onclick="confirmDeleteMood()">Yes, Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Inline init for specific page
+        document.addEventListener('DOMContentLoaded', fetchMoods);
+    </script>
+</body>
+
+</html>

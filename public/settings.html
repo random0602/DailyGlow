@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Glow - Settings</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+
+    <div id="notification-container"></div>
+
+    <nav class="sidebar">
+        <div class="logo"><h2>✨ Glow</h2></div>
+        <ul>
+            <li><a href="dashboard.html"><i class="fas fa-home"></i> Dashboard</a></li>
+            <li><a href="calendar.html"><i class="fas fa-calendar-alt"></i> Calendar</a></li>
+            <li><a href="moods.html"><i class="fas fa-smile"></i> Moods</a></li>
+            <li class="active"><a href="settings.html"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+        <div class="logout-section">
+            <button onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <header class="top-bar">
+            <div class="welcome-text">
+                <h1>Settings ⚙️</h1>
+                <p>Customize your experience.</p>
+            </div>
+            <div class="user-profile"><div class="avatar">🌸</div></div>
+        </header>
+
+        <section class="settings-section">
+            <h3>Appearance</h3>
+            <div class="setting-card">
+                <div class="setting-info">
+                    <div class="icon-box">🌙</div>
+                    <div>
+                        <h4>Dark Mode</h4>
+                        <p>Switch to a darker, easier-on-the-eyes theme.</p>
+                    </div>
+                </div>
+                <label class="switch">
+                    <input type="checkbox" id="darkModeToggle" onchange="toggleDarkMode()">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+        </section>
+
+        <section class="settings-section danger-zone">
+            <h3>Danger Zone</h3>
+            <div class="setting-card danger">
+                <div class="setting-info">
+                    <div class="icon-box danger-icon">⚠️</div>
+                    <div>
+                        <h4>Delete Account</h4>
+                        <p>Permanently remove your account and all data.</p>
+                    </div>
+                </div>
+                <button onclick="confirmDeleteAccount()" class="btn-delete-account">Delete My Account</button>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="confirm-modal" class="modal-overlay">
+        <div class="modal-card">
+            <div class="modal-icon">💔</div>
+            <h3>Goodbye forever?</h3>
+            <p>This action cannot be undone. All tasks & moods will be lost.</p>
+            <div class="modal-actions">
+                <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+                <button class="btn-confirm" onclick="deleteAccount()">Yes, Delete Everything</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Check saved theme on load
+        if (localStorage.getItem('theme') === 'dark') {
+            document.body.classList.add('dark-mode');
+            document.getElementById('darkModeToggle').checked = true;
+        }
+    </script>
+</body>
+</html>
