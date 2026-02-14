@@ -31,7 +31,7 @@ import { UsersModule } from './users/users.module';
     : {
         // LOCAL DEVELOPMENT
         type: 'sqlite',
-        database: 'turbo.db',
+        database: 'pink-planner.db',
         entities: [User, Task, Mood],
         synchronize: true,
       }
