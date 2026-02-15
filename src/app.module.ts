@@ -11,6 +11,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { MoodsModule } from './moods/moods.module';
 import { Mood } from './moods/entities/mood.entity';
 import { UsersModule } from './users/users.module';
+import { PassportModule } from '@nestjs/passport';
+import { JwtStrategy } from './auth/jwt.strategy';
 
 @Module({
   imports: [
@@ -19,40 +21,37 @@ import { UsersModule } from './users/users.module';
     }),
 
     TypeOrmModule.forRoot(
-  process.env.DATABASE_URL 
-    ? {
-        // PRODUCTION (Railway)
-        type: 'postgres',
-        url: process.env.DATABASE_URL,
-        autoLoadEntities: true,
-        synchronize: true,
-        ssl: { rejectUnauthorized: false },
-      } 
-    : {
-        // LOCAL DEVELOPMENT
-        type: 'sqlite',
-        database: 'pink-planner.db',
-        entities: [User, Task, Mood],
-        synchronize: true,
-      }
-),
+      process.env.DATABASE_URL 
+        ? {
+            type: 'postgres',
+            url: process.env.DATABASE_URL,
+            autoLoadEntities: true,
+            synchronize: true,
+            ssl: { rejectUnauthorized: false },
+          } 
+        : {
+            type: 'sqlite',
+            database: 'pink-planner.db',
+            entities: [User, Task, Mood],
+            synchronize: true,
+          }
+    ),
 
     TypeOrmModule.forFeature([User]),
 
+    PassportModule, 
+
     JwtModule.register({
       global: true,
-      secret: 'SECRET_KEY_123',
+      secret: process.env.JWT_SECRET || 'MySecretKey123!',
       signOptions: { expiresIn: '1h' },
     }),
 
     TasksModule,
-
     MoodsModule,
-
     UsersModule,
-
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, JwtStrategy], 
 })
 export class AppModule { }
