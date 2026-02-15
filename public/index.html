@@ -64,11 +64,10 @@
             gap: 10px;
         }
 
-        /* The Notification Box */
         .notification {
             background: white;
             padding: 15px 25px;
-            border-radius: 50px; /* Fully rounded pill shape */
+            border-radius: 50px;
             box-shadow: 0 5px 15px rgba(231, 84, 128, 0.3);
             font-size: 0.9rem;
             font-weight: 600;
@@ -82,19 +81,16 @@
             justify-content: center;
         }
 
-        /* Success Theme (Pink) */
         .notification.success {
             border: 2px solid #F8C8DC;
             color: #E75480;
         }
 
-        /* Error Theme (Soft Red) */
         .notification.error {
             border: 2px solid #ffcccc;
             color: #d63f6c;
         }
 
-        /* Animations */
         @keyframes slideIn {
             to { opacity: 1; transform: translateY(0); }
         }
@@ -121,22 +117,17 @@
     <script>
         let isLogin = true;
 
-    // 1. New Notification Function
     function showNotification(message, type = 'success') {
         const container = document.getElementById('notification-container');
         
-        // Create the element
         const notif = document.createElement('div');
         notif.className = `notification ${type}`;
         
-        // Add icon based on type
         const icon = type === 'success' ? '✨' : '⚠️';
         notif.innerHTML = `<span>${icon}</span> ${message}`;
 
-        // Add to screen
         container.appendChild(notif);
 
-        // Remove it after 3 seconds (matches CSS animation)
         setTimeout(() => {
             notif.remove();
         }, 3000);
@@ -153,7 +144,6 @@
         const username = document.getElementById('username').value;
         const pass = document.getElementById('password').value;
 
-        // Basic validation
         if (!username || !pass) {
             showNotification("Please fill in all fields", "error");
             return;
@@ -173,7 +163,6 @@
                     const data = await res.json();
                     localStorage.setItem('token', data.accessToken);
                     
-                    // Show success and redirect
                     showNotification("Welcome back! ✨", "success");
                     setTimeout(() => window.location.href = '/dashboard.html', 1000);
                 } else {
@@ -181,9 +170,7 @@
                     toggleMode();
                 }
             } else {
-                // Handle server errors (like "User already exists")
                 const errorMsg = await res.text();
-                // Parse the error if it's JSON, otherwise show text
                 try {
                     const errorJson = JSON.parse(errorMsg);
                     showNotification(errorJson.message, "error");
