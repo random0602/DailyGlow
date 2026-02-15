@@ -13,10 +13,10 @@ export class TasksService {
     private tasksRepository: Repository<Task>,
   ) {}
 
-  create(createTaskDto: CreateTaskDto, user: User) {
+  create(createTaskDto: CreateTaskDto, user: any) {
     const task = this.tasksRepository.create({
       ...createTaskDto,
-      user: user,
+      user: { id: user.userId }, 
     });
     return this.tasksRepository.save(task);
   }
