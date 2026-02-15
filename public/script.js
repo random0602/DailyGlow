@@ -66,9 +66,9 @@ function renderTasks(tasks) {
 
     tasks.forEach(task => {
         const li = document.createElement('li');
-        li.className = `task-item ${task.isCompleted ? 'completed' : ''}`;
+        li.className = `task-item ${task.completed ? 'completed' : ''}`;
         li.innerHTML = `
-            <span style="cursor:pointer; flex-grow:1;" onclick="toggleTask(${task.id}, ${!task.isCompleted})">
+            <span style="cursor:pointer; flex-grow:1;" onclick="toggleTask(${task.id}, ${!task.completed})">
                 ${task.title}
             </span>
             <i class="fas fa-trash" style="color:#ffb3b3; cursor:pointer;" onclick="deleteTask(${task.id})"></i>
@@ -79,7 +79,7 @@ function renderTasks(tasks) {
 
 function updateStats(tasks) {
     const total = tasks.length;
-    const completed = tasks.filter(t => t.isCompleted).length;
+    const completed = tasks.filter(t => t.completed).length;
     const pending = total - completed;
 
     document.getElementById('total-count').textContent = total;
