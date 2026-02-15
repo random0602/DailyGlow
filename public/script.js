@@ -506,3 +506,8 @@ async function deleteAccount() {
         alert("Error deleting account. Please try again.");
     }
 }
+
+function logout() {
+    localStorage.removeItem('token');
+    window.location.href = '/index.html';
+}
