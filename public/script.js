@@ -24,10 +24,27 @@ document.addEventListener('DOMContentLoaded', () => {
 // --- TASK LOGIC ---
 
 async function fetchTasks() {
-    const response = await fetch(API_URL);
-    const tasks = await response.json();
-    renderTasks(tasks);
-    updateStats(tasks);
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = '/index.html';
+        return;
+    }
+
+    const response = await fetch(`${API_URL}`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`, 
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (response.ok) {
+        const tasks = await response.json();
+        renderTasks(tasks);
+        renderCalendar(currentDate);
+    } else {
+        console.error("Failed to fetch tasks");
+    }
 }
 
 function renderTasks(tasks) {
@@ -79,18 +96,28 @@ function generateCalendar() {
 // --- API ACTIONS ---
 
 async function addTask() {
-    const input = document.getElementById('taskInput');
-    if (!input.value.trim()) return;
+    const taskInput = document.getElementById('taskInput');
+    const title = taskInput.value;
+    const token = localStorage.getItem('token');
 
-    await fetch(API_URL, {
+    if (!title) return;
+
+    const response = await fetch(`${API_URL}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title: input.value }),
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ title }),
     });
-    input.value = '';
-    fetchTasks();
-}
 
+    if (response.ok) {
+        taskInput.value = '';
+        fetchTasks();
+    } else {
+        alert("Failed to add task. Please login again.");
+    }
+}
 async function toggleTask(id, isCompleted) {
     await fetch(`${API_URL}/${id}`, {
         method: 'PATCH',

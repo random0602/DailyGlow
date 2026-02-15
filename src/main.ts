@@ -6,9 +6,9 @@ async function bootstrap() {
   app.enableCors();
   
   const port = process.env.PORT || 3000;
-  console.log(`🚀 STARTING SERVER on PORT: ${port} and HOST: 0.0.0.0`);
+  console.log(`STARTING SERVER on PORT: ${port} and HOST: 0.0.0.0`);
   
   await app.listen(port, '0.0.0.0');
-  console.log(`✅ Application is successfully running!`);
+  console.log(`Application is successfully running!`);
 }
 bootstrap();
