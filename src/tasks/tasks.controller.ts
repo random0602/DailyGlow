@@ -2,19 +2,22 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('tasks')
 export class TasksController {
   constructor(private readonly tasksService: TasksService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createTaskDto: CreateTaskDto) {
-    return this.tasksService.create(createTaskDto);
+  create(@Body() createTaskDto: CreateTaskDto, @Request() req) {
+    return this.tasksService.create(createTaskDto, req.user);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get()
-  findAll() {
-    return this.tasksService.findAll();
+  findAll(@Request() req) {
+    return this.tasksService.findAll(req.user.userId);
   }
 
   @Patch(':id')

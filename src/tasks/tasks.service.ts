@@ -12,14 +12,20 @@ export class TasksService {
     private tasksRepository: Repository<Task>,
   ) {}
 
-  create(createTaskDto: CreateTaskDto) {
-    const task = this.tasksRepository.create(createTaskDto);
-    return this.tasksRepository.save(task);
-  }
+  create(createTaskDto: CreateTaskDto, user: any) {
+  const task = this.tasksRepository.create({
+    ...createTaskDto,
+    user: user,
+  });
+  return this.tasksRepository.save(task);
+}
 
-  findAll() {
-    return this.tasksRepository.find({ order: { createdAt: 'DESC' } });
-  }
+  findAll(userId: number) {
+  return this.tasksRepository.find({
+    where: { user: { id: userId } },
+    order: { createdAt: 'DESC' },
+  });
+}
 
   findOne(id: number) {
     return this.tasksRepository.findOneBy({ id });
