@@ -393,9 +393,18 @@ function toggleDarkMode() {
     localStorage.setItem('theme', body.classList.contains('dark-mode') ? 'dark' : 'light');
 }
 
-async function deleteAccount() {
-    if(!confirm("This will delete all your data. Are you sure?")) return;
+// 👇 ADDED: Opens the custom modal
+function confirmDeleteAccount() {
+    document.getElementById('confirm-modal').style.display = 'flex';
+}
 
+// 👇 ADDED: Closes the custom modal if they click Cancel
+function closeModal() {
+    document.getElementById('confirm-modal').style.display = 'none';
+}
+
+// 👇 UPDATED: Deletes the account (Removed the ugly default browser prompt)
+async function deleteAccount() {
     const token = localStorage.getItem('token');
     const headers = getAuthHeaders();
     if (!headers) return;
